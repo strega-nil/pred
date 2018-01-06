@@ -34,8 +34,8 @@ let pop self =
   self.buff.(self.length) <- None; (* GC purposes *)
   unwrap ret
 
-let push self el =
-  if self.length == capacity(self) then (
+let push el self =
+  if self.length == capacity self then (
     if (self.length != 0) then (
       resize self (self.length * 2)
     ) else (
@@ -45,11 +45,11 @@ let push self el =
   self.buff.(self.length) <- Some(el);
   self.length <- self.length + 1
 
-let get self idx =
+let get idx self =
   assert (idx < self.length);
   unwrap self.buff.(idx)
 
-let set self idx el =
+let set idx el self =
   assert (idx < self.length);
   self.buff.(idx) <- Some(el)
 

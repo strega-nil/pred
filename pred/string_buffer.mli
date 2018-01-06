@@ -11,12 +11,12 @@ val length: t -> int
 
 val capacity: t -> int
 
-val push: t -> char -> unit
+val push: char -> t -> unit
 
 val pop: t -> char
 
-val get: t -> int -> char
+val get: int -> t -> char
 
-val set: t -> int -> char -> unit
+val set: int -> char -> t -> unit
 
 val to_string: t -> string

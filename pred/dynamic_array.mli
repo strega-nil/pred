@@ -10,12 +10,12 @@ val length: 'a t -> int
 
 val capacity: 'a t -> int
 
-val push: 'a t -> 'a -> unit
+val push: 'a -> 'a t -> unit
 
 val pop: 'a t -> 'a
 
-val get: 'a t -> int -> 'a
+val get: int -> 'a t -> 'a
 
-val set: 'a t -> int -> 'a -> unit
+val set: int -> 'a -> 'a t -> unit
 
 val to_array: 'a t -> 'a array

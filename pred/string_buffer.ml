@@ -13,28 +13,29 @@ let length {length; _} = length
 
 let capacity {buff; _} = Bytes.length buff
 
-let resize self new_size =
-  assert (self.length <= new_size);
-  let new_buff = Bytes.create(new_size) in
-  Bytes.blit self.buff 0 new_buff 0 self.length;
-  self.buff <- new_buff
 
 let pop self =
   assert (self.length > 0);
   self.length <- self.length - 1;
   Bytes.get self.buff self.length
 
-let push self ch =
+let push ch self =
+  let resize new_size self =
+    assert (self.length <= new_size);
+    let new_buff = Bytes.create(new_size) in
+    Bytes.blit self.buff 0 new_buff 0 self.length;
+    self.buff <- new_buff
+  in
   if self.length == capacity self then
-    resize self (self.length * 2);
+    resize (self.length * 2) self;
   Bytes.set self.buff self.length ch;
   self.length <- self.length + 1
 
-let get self idx =
+let get idx self =
   assert (idx < self.length);
   Bytes.get self.buff idx
 
-let set self idx ch =
+let set idx ch self =
   assert (idx < self.length);
   Bytes.set self.buff idx ch
 
