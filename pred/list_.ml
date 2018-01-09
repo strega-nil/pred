@@ -23,4 +23,8 @@ module Monad = struct
     let ret = ref [] in
     helper lst ret f;
     !ret
+
+  module Let_syntax = struct
+    let bind x ~f = x >>= f
+  end
 end

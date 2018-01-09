@@ -13,4 +13,8 @@ module Monad = struct
     | Some x -> f x
     | None -> None
   let pure x = Some x
+
+  module Let_syntax = struct
+    let bind x ~f = x >>= f
+  end
 end

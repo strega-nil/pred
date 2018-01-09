@@ -21,4 +21,8 @@ module Monad(E: Interfaces.Type) = struct
   let (>>=) self f = and_then f self
   let pure ok = Ok ok
   let pure_err err = Error err
+
+  module Let_syntax = struct
+    let bind x ~f = x >>= f
+  end
 end
