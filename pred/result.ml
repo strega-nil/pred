@@ -14,6 +14,10 @@ let and_then f = function
 | Ok ok -> f ok
 | Error e -> Error e
 
+let expect f = function
+| Ok ok -> ok
+| Error e -> f e
+
 module Monad(E: Interfaces.Type) = struct
   type nonrec 'o t = ('o, E.t) t
   type error = E.t
