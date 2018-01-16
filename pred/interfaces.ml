@@ -1,10 +1,6 @@
-module Prelude = struct
-  module type Type = sig
-    type t
-  end
+module type Type = sig
+  type t
 end
-
-include Prelude
 
 module type Monad = sig
   type 'a t
