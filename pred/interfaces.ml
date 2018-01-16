@@ -16,7 +16,7 @@ module type Monad = sig
   end
 end
 
-module type Monad_result = sig
+module type Result_monad = sig
   include Monad
 
   type error

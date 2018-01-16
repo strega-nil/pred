@@ -7,8 +7,6 @@ module Option = Option
 module Result = Result
 module String_buffer = String_buffer
 
-include Interfaces.Prelude
-
 type 'a iter = 'a Iter.t
 type string_buffer = String_buffer.t
 type 'a dynamic_array = 'a Dynamic_array.t
