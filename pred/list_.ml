@@ -6,6 +6,16 @@ let iter init =
     | x :: xs -> Some (xs, x)
     | [] -> None)
 
+(* rewritten to be tail-recursive *)
+let map f xs =
+  let rec helper f new_lst = function
+  | x :: xs ->
+    new_lst := (f x) :: !new_lst;
+    (helper [@tailcall]) f new_lst xs
+  | [] -> !new_lst
+  in
+  helper f (ref []) xs
+
 module Monad = struct
   type 'a t = 'a list
 
@@ -15,9 +25,12 @@ module Monad = struct
     let rec helper old ret f =
       match old with
       | x :: xs ->
-        (* second impl note - not tail recursive *)
+        (*
+          impl note - not tail recursive
+          uses stack space on the order of O(len (f x))
+        *)
         ret := append (f x) !ret;
-        helper xs ret f
+        (helper [@tailcall]) xs ret f
       | [] -> ()
     in
     let ret = ref [] in

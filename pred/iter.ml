@@ -53,7 +53,7 @@ let flatten (Iter (main_state, main_func)) =
       | None ->
         (match main_func main_state with
         | Some (main_state, iter) ->
-          func (iter, main_state)
+          (func [@tailcall]) (iter, main_state)
         | None -> None)
     in
     Iter (state, func)
@@ -115,7 +115,7 @@ let next (Iter (state, func)) =
 let nth n (Iter (state, func)) =
   let rec helper n state =
     match func state with
-    | Some (state, _) when n > 0 -> helper (n - 1) state
+    | Some (state, _) when n > 0 -> (helper [@tailcall]) (n - 1) state
     | Some (_, el) -> Some el
     | None -> None
   in
@@ -126,7 +126,7 @@ let fold f init (Iter (state, func)) =
     match func state with
     | Some (state, el) ->
       let cur = f el in
-      helper cur state
+      (helper [@tailcall]) cur state
     | None -> cur
   in
   helper init state
@@ -134,7 +134,7 @@ let fold f init (Iter (state, func)) =
 let for_each f (Iter (state, func)) =
   let rec helper state =
     match func state with
-    | Some (state, el) -> f(el); helper(state)
+    | Some (state, el) -> f el; (helper [@tailcall]) state
     | None -> ()
   in
   helper state
@@ -142,10 +142,10 @@ let for_each f (Iter (state, func)) =
 let for_each_break f (Iter (state, func)) =
   let rec helper state =
     match func state with
-    | Some((state, el)) -> (
-      match f(el) with
-      | Some(ret) -> Some(ret)
-      | None -> helper(state))
+    | Some (state, el) ->
+      (match f el with
+      | Some ret -> Some ret
+      | None -> (helper [@tailcall]) state)
     | None -> None
   in
   helper(state)
