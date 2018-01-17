@@ -9,7 +9,7 @@ let iter init =
 module Monad = struct
   type 'a t = 'a list
 
-  let pure x = [x]
+  let wrap x = [x]
   let (>>=) lst f =
     (* impl note - uses a ref in order to be tail recursive *)
     let rec helper old ret f =
