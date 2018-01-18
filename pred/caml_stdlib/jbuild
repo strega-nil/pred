@@ -2,5 +2,5 @@
 
 (library
  ((name pred_caml_stdlib)
-  (public_name pred.caml_stdlib)
+  (public_name pred.caml)
   (flags (:standard -w @a))))
