@@ -1,4 +1,4 @@
-include List
+include Pred_caml_stdlib.List
 
 type 'a t = 'a list
 
@@ -48,7 +48,7 @@ let map f xs =
 let collect it =
   Iter.fold [] (fun acc el -> el :: acc) it
 
-let fold acc f lst = List.fold_left f acc lst
+let fold acc f lst = fold_left f acc lst
 
 module Monad = struct
   type nonrec 'a t = 'a t

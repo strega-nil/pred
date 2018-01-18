@@ -1,5 +1,3 @@
-include module type of List
-
 type 'a t = 'a list
 (** type alias *)
 
