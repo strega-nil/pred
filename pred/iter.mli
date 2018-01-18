@@ -60,7 +60,7 @@ val take_while: ('a -> bool) -> 'a t -> 'a t
 (** {1 use} *)
 val next: 'a t -> ('a t * 'a) option
 val nth: int -> 'a t -> 'a option
-val fold:  'b -> ('b -> 'a -> 'b) -> 'a t -> 'b
+val fold: 'a -> ('a -> 'b -> 'a) -> 'b t -> 'a
 val for_each: ('a -> unit) -> 'a t -> unit
 
 (**

@@ -1,60 +1,64 @@
 include module type of List
 
 type 'a t = 'a list
+(** type alias *)
 
+(** {1 list operations }  *)
+
+val hd: 'a list -> 'a option
 (**
-  t operations.
+  @return the first element of the given list.
+  @return [None] if the given list is empty.
 *)
 
-val hd: 'a t -> 'a option
+val tl: 'a list -> 'a list option
 (**
-  returns the first element of the given t.
-  returns [None] if the given t is empty.
+  @return the given list without its first element.
+  @return [None] if the given list is empty.
 *)
 
-val tl: 'a t -> 'a t option
+val nth: int -> 'a list -> 'a option
 (**
-  returns the given t without its first element.
-  returns [None] if the given t is empty.
-*)
-
-val nth: int -> 'a t -> 'a option
-(**
-  returns the [n]-th element of the given t.
+  @return the [n]-th element of the given list.
   the first element is at position [0].
-  returns [None] if the t is too short.
-  raises [Invalid_argument "List.nth"] if [n] is negative.
+  @return [None] if the list is too short.
+  @raise Invalid_argument if [n] is negative.
 *)
 
-val rev: 'a t -> 'a t
+val rev: 'a list -> 'a list
 (**
-  returns the reverse of the parameter.
+  @return the reverse of the parameter.
 *)
 
-val flatten: 'a t t -> 'a t
+val flatten: 'a list list -> 'a list
 (**
-  Concatenates a t of ts.
-  tail recursive in the size of the overarching t;
-  not tail recursive in the size of each element t.
+  Concatenates a list of lists.
+  tail recursive in the size of the overarching list;
+  not tail recursive in the size of each element list.
 *)
 
-val concat: 'a t t -> 'a t
+val concat: 'a list list -> 'a list
 (** an alias for [flatten] *)
 
-(** {1 iterators} *)
+(** {2 iterators} *)
 
-val map: ('a -> 'b) -> 'a t -> 'b t
+val map: ('a -> 'b) -> 'a list -> 'b list
 (**
- [List.map f [a0; ... an]] applies [f] to each of [am], and returns
- [[f a0; ... f an]]. tail recursive, unlike the standard library's
- implementation.
+ [List.map f [a0; ... an]] applies [f] to each of [am]
+ @return [[f a0; ... f an]].
+ tail recursive, unlike the standard library's implementation.
 *)
 
-val iter: 'a t -> 'a Iter.t
-(** iterates over all the elements of the t *)
+val iter: 'a list -> 'a Iter.t
+(** iterates over all the elements of the list *)
 
-val collect: 'a Iter.t -> 'a t
-(** collects the elements of the iterator into a t *)
+val collect: 'a Iter.t -> 'a list
+(** collects the elements of the iterator into a list *)
+
+val fold: 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+(**
+  [List.fold a f [b1; ...; bn]] is [f (... (f (f a b1) b2) ...) bn].
+*)
 
 
 module Monad: Interfaces.Monad with type 'a t = 'a t
