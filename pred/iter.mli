@@ -97,15 +97,21 @@ val take_while: ('a -> bool) -> 'a t -> 'a t
   will generate [<1, 4, 2, 3>].
 *)
 
-(** {1 use} *)
+(**
+  {1 use}
+
+  note that iterators may be functionally impure behind the scenes;
+  the API is intended to be useable in a functionally pure way,
+  but OCaml is fundamentally an impure language.
+  this means that, given an arbitrary [it: 'a t],
+  [(next it) = (next it)] is not necessarily [true].
+*)
 
 val next: 'a t -> ('a t * 'a) option
 (**
   iterates the iterator by one,
   and returns the generated element,
   plus the new iterator.
-
-  the old iterator should be considered invalid.
 *)
 
 val nth: int -> 'a t -> 'a option
