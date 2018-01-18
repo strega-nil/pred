@@ -1,12 +1,41 @@
 include List
 
+type 'a t = 'a list
+
+let hd = function
+| x :: _ -> Some x
+| [] -> None
+
+let tl = function
+| _ :: xs -> Some xs
+| [] -> None
+
+let nth idx lst = nth_opt lst idx
+
+let rev lst =
+  let rec helper cur = function
+  | x :: xs -> (helper [@tailcall]) (x :: cur) xs
+  | [] -> cur
+  in
+  helper [] lst
+
+let flatten xs =
+  let rec helper new_lst = function
+  | x :: xs ->
+    new_lst := append x !new_lst;
+    (helper [@tailcall]) new_lst xs
+  | [] -> !new_lst
+  in
+  helper (ref []) xs
+
+let concat = flatten
+
 let iter init = 
   Iter.make init 
     (function
     | x :: xs -> Some (xs, x)
     | [] -> None)
 
-(* rewritten to be tail-recursive *)
 let map f xs =
   let rec helper f new_lst = function
   | x :: xs ->
@@ -16,8 +45,11 @@ let map f xs =
   in
   helper f (ref []) xs
 
+let collect it =
+  Iter.fold [] (fun acc el -> el :: acc) it
+
 module Monad = struct
-  type 'a t = 'a list
+  type nonrec 'a t = 'a t
 
   let wrap x = [x]
   let (>>=) lst f =

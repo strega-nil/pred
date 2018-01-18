@@ -59,15 +59,13 @@ let flatten (Iter (main_state, main_func)) =
     Iter (state, func)
   | None -> empty
 
-exception Iter_zipped_iterators_of_different_lengths
 let zip (Iter (state1, func1)) (Iter (state2, func2)) =
   let state = (state1, state2) in
   let func (state1, state2) =
     match (func1 state1, func2 state2) with
     | (Some (state1, el1), Some (state2, el2)) ->
       Some ((state1, state2), (el1, el2))
-    | (None, None) -> None
-    | _ -> raise Iter_zipped_iterators_of_different_lengths
+    | _ -> None
   in
   Iter (state, func)
 
@@ -121,13 +119,13 @@ let nth n (Iter (state, func)) =
   in
   helper n state
 
-let fold f init (Iter (state, func)) =
-  let rec helper cur state =
+let fold init f (Iter (state, func)) =
+  let rec helper acc state =
     match func state with
     | Some (state, el) ->
-      let cur = f el in
-      (helper [@tailcall]) cur state
-    | None -> cur
+      let acc = f acc el in
+      (helper [@tailcall]) acc state
+    | None -> acc
   in
   helper init state
 
