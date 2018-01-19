@@ -1,13 +1,88 @@
-include Pred_caml_stdlib.Array
+module Caml = Pred_caml_stdlib.Array
+
+type 'a t = 'a array
+
+(* basic array operations *)
+
+let length = Caml.length
+
+let get = Caml.get
+let unsafe_get = Caml.unsafe_get
+
+let nth n arr =
+  if n < length arr then
+    Some (Caml.get arr n)
+  else
+    None
+
+let set = Caml.set
+let unsafe_set = Caml.unsafe_set
+
+(* constructors *)
+
+let make = Caml.make
+
+let init = Caml.init
+
+let append = Caml.append
+
+let flatten = Caml.concat
+
+let concat = Caml.concat
+
+let sub start end_ arr =
+  Caml.sub arr start (end_ - start)
+
+let sub_from start arr = sub start (length arr) arr
+
+let sub_to end_ = sub 0 end_
+
+let copy = Caml.copy
+
+(** {1 search} *)
+
+let find p arr =
+  let rec helper p arr len i =
+    if i < len then
+      (let x = unsafe_get arr i in
+      if p x then
+        Some (i, x)
+      else
+        (helper [@tailcall]) p arr len (i + 1))
+    else
+      None
+  in
+  helper p arr (length arr) 0
+
+(** {1 mutation} *)
+
+let fill = Caml.fill
+
+let blit = Caml.blit
+
+let sort = Caml.fast_sort
+
+let stable_sort = Caml.stable_sort
+
+(** {1 iteration} *)
 
 let iter arr =
   Iter.make 0
     (fun idx ->
-      if idx < length(arr) then
+      if idx < length arr then
         Some (idx + 1, get arr idx)
       else
         None)
 
-let fold acc f arr = fold_left f acc arr
+let map f arr =
+  init
+    (length arr)
+    (fun i -> f (unsafe_get arr i))
 
-let flatten = concat
+let fold acc f arr = Caml.fold_left f acc arr
+
+(** {1 conversions with [list]} *)
+
+let to_list = Caml.to_list
+
+let of_list = Caml.of_list

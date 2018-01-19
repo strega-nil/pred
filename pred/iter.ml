@@ -148,14 +148,9 @@ let for_each_break f (Iter (state, func)) =
   in
   helper(state)
 
-module Monad = struct
+module Monad = Interfaces.Make_monad(struct
   type nonrec 'a t = 'a t
 
   let wrap = once
-
   let (>>=) iter f = flatten (map f iter)
-
-  module Let_syntax = struct
-    let bind x ~f = x >>= f
-  end
-end
+end)

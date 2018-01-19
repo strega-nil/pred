@@ -18,15 +18,11 @@ let expect f = function
 | Ok ok -> ok
 | Error e -> f e
 
-module Monad(E: Interfaces.Type) = struct
-  type nonrec 'o t = ('o, E.t) t
+module Monad(E: Interfaces.Type) = Interfaces.Make_result_monad(struct
   type error = E.t
+  type nonrec 'o t = ('o, E.t) t
 
   let (>>=) self f = and_then f self
   let wrap ok = Ok ok
   let wrap_err err = Error err
-
-  module Let_syntax = struct
-    let bind x ~f = x >>= f
-  end
-end
+end)

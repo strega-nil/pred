@@ -5,7 +5,7 @@ let iter x =
   in
   Iter.make x helper
 
-module Monad = struct
+module Monad = Interfaces.Make_monad(struct
   type 'a t = 'a option
 
   let (>>=) x f =
@@ -13,8 +13,4 @@ module Monad = struct
     | Some x -> f x
     | None -> None
   let wrap x = Some x
-
-  module Let_syntax = struct
-    let bind x ~f = x >>= f
-  end
-end
+end)

@@ -50,7 +50,7 @@ let collect it =
 
 let fold acc f lst = fold_left f acc lst
 
-module Monad = struct
+module Monad = Interfaces.Make_monad(struct
   type nonrec 'a t = 'a t
 
   let wrap x = [x]
@@ -70,8 +70,4 @@ module Monad = struct
     let ret = ref [] in
     helper lst ret f;
     !ret
-
-  module Let_syntax = struct
-    let bind x ~f = x >>= f
-  end
-end
+end)

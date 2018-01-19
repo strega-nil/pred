@@ -4,10 +4,10 @@
   [Pred] is intended as a replacement for the OCaml standard library.
 
   in order to use it with a jbuilder project,
-  you may want to [open] it by default.
-  you can do this with the [-open Pred] compiler flag.
+  one may want to [open] it by default.
+  this is possible with the [-open Pred] compiler flag.
 
-  {2 sample jbuild file}
+  {3 sample jbuild file}
 
   {[
 (jbuild_version 1)
@@ -17,6 +17,14 @@
   (libraries (pred))
   (flags (:standard -w @a-4 -open Pred))))
   ]}
+
+  it is recommended that one uses this library with Jane Street's [ppx_let];
+  this allows for nice monadic bind syntax,
+  instead of using [>>=] everywhere.
+
+  to do this, add [ppx_let] as a dependency,
+  and add [(preprocess (pps (ppx_let)))]
+  to the [library] or [executables] section.
 *)
 
 module Array = Array
