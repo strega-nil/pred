@@ -1,6 +1,4 @@
 (**
-  {1 [Pred]}
-
   [Pred] is intended as a replacement for the OCaml standard library.
 
   in order to use it with a jbuilder project,

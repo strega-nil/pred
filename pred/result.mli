@@ -9,6 +9,6 @@ val and_then: ('o -> ('o2, 'e) t) -> ('o, 'e) t -> ('o2, 'e) t
 val expect: ('e -> 'o) -> ('o, 'e) t -> 'o
 
 module Monad(E: Interfaces.Type)
-  : Interfaces.Result_monad
+  : Interfaces.Result_monad.Interface
     with type error = E.t
     and type 'o t = ('o, E.t) t

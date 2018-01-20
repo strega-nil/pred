@@ -18,7 +18,7 @@ let expect f = function
 | Ok ok -> ok
 | Error e -> f e
 
-module Monad(E: Interfaces.Type) = Interfaces.Make_result_monad(struct
+module Monad(E: Interfaces.Type) = Interfaces.Result_monad.Make(struct
   type error = E.t
   type nonrec 'o t = ('o, E.t) t
 

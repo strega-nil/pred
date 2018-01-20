@@ -50,7 +50,7 @@ let collect it =
 
 let fold acc f lst = fold_left f acc lst
 
-module Monad = Interfaces.Make_monad(struct
+module Monad = Interfaces.Monad.Make(struct
   type nonrec 'a t = 'a t
 
   let wrap x = [x]

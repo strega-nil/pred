@@ -59,4 +59,4 @@ val fold: 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
 *)
 
 
-module Monad: Interfaces.Monad with type 'a t = 'a t
+module Monad: Interfaces.Monad.Interface with type 'a t = 'a t

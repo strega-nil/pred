@@ -147,4 +147,4 @@ val for_each_break: ('a -> 'b option) -> 'a t -> 'b option
   ]
 *)
 
-module Monad: Interfaces.Monad with type 'a t = 'a t
+module Monad: Interfaces.Monad.Interface with type 'a t = 'a t

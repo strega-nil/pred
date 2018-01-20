@@ -1,11 +1,11 @@
 let iter x =
-  let helper = function
+  let func = function
   | Some x -> Some (None, x)
   | None -> None
   in
-  Iter.make x helper
+  Iter.make x func
 
-module Monad = Interfaces.Make_monad(struct
+module Monad = Interfaces.Monad.Make(struct
   type 'a t = 'a option
 
   let (>>=) x f =

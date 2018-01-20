@@ -148,7 +148,7 @@ let for_each_break f (Iter (state, func)) =
   in
   helper(state)
 
-module Monad = Interfaces.Make_monad(struct
+module Monad = Interfaces.Monad.Make(struct
   type nonrec 'a t = 'a t
 
   let wrap = once
