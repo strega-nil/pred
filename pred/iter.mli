@@ -51,7 +51,7 @@ val range: int -> int -> int t
 (**
   [range n m], where [n < m], generates [<n; n + 1; ... m - 1>].
 
-  where [m <= n], generates [<>].
+  if [m <= n], generates [<>].
 *)
 
 (** {1 transformations} *)
