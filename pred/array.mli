@@ -85,6 +85,12 @@ val init: int -> (int -> 'a) -> 'a array
   @raise Invalid argument if n is an invalid size
 *)
 
+val map: ('a -> 'b) -> 'a array -> 'b array
+(**
+  [map f arr] is equivalent to
+  [iter (length arr) (fun i -> f arr.(i))].
+*)
+
 val append: 'a array -> 'a array -> 'a array
 (**
   [append [|x0; x1; ... xn|] [|y0; y1; ... yn|]]
@@ -145,11 +151,20 @@ val sub_to: int -> 'a array -> 'a array
 
 val copy: 'a array -> 'a array
 (**
+  [copy arr] returns a new array with the same elements as [arr].
 *)
 
 (** {1 search} *)
 
 val find: ('a -> bool) -> 'a array -> (int * 'a) option
+(**
+  [find p arr] finds the first element in [arr] that satisfies [p],
+  and returns both its index,
+  and the element itself.
+
+  if no element satisfies the predicate,
+  then [find] returns [None].
+*)
 
 (* note: mem and memq will be added later *)
 
@@ -159,24 +174,80 @@ val find: ('a -> bool) -> 'a array -> (int * 'a) option
 
 (** {1 mutation} *)
 
-val fill: 'a array -> int -> int -> 'a -> unit
+val fill: int -> int -> 'a -> 'a array -> unit
+(**
+  [fill start end el arr] sets each element
+  from [arr.(start)] to [arr.(end - 1)] to [el].
 
-val blit: 'a array -> int -> 'a array -> int -> int -> unit
+  @raise Invalid_argument if
+    [start < 0],
+    [end < start],
+    or [end > length arr]
+*)
+
+val blit: int -> int -> 'a array -> int -> 'a array -> unit
+(**
+  [blit start1 end1 arr1 start2 arr2]
+  copies the elements from [arr1.(start1)] to [arr1.(end1 - 1)],
+  to the range starting at [arr2.(start2)].
+
+  @raise Invalid_argument if
+    [start1 < 0], [start2 < 0],
+    [end1 < start1],
+    [end1 > length arr1],
+    or [start1 + (end1 - start1) > length arr2]
+*)
 
 val sort: ('a -> 'a -> int) -> 'a array -> unit
+(**
+  [sort c arr] sorts [arr] using [c] as a comparison function.
+
+  if [c a1 a2 < 0], then [a1] will sort before [a2].
+
+  if [c a1 a2 > 0], then [a1] will sort after [a2].
+
+  if [c a1 a2 = 0], then ordering is not guaranteed.
+
+  [c] must be a total order on the set of elements in the array.
+
+  [sort] is guaranteed to run in constant heap space,
+  and at most logarithmic stack space.
+*)
 
 val stable_sort: ('a -> 'a -> int) -> 'a array -> unit
+(**
+  equivalent to {!sort}, except that elements that compare equal
+  will have the same order as in the original array.
+
+  not guaranteed to run in constant heap space.
+*)
+
+val fast_sort: ('a -> 'a -> int) -> 'a array -> unit
+(**
+  equivalent to either {!sort} or {!stable_sort},
+  whichever is faster on typical input.
+*)
 
 (** {1 iteration} *)
 
 val iter: 'a array -> 'a Iter.t
-
-val map: ('a -> 'b) -> 'a array -> 'b array
+(**
+  [iter [|a0; a1; ... an|]] generates the sequence [<a0; a1; ... an>].
+*)
 
 val fold: 'a -> ('a -> 'b -> 'a) -> 'b array -> 'a
+(**
+  [fold a f [|b0; b1; ... bn|]] is [f (... (f (f a b0) b1) ...) bn].
+*)
 
 (** {1 conversions with [list]} *)
 
 val to_list: 'a array -> 'a list
+(**
+  [to_list [|a0; a1; ... an|]] creates the list [[a0; a1; ... an]].
+*)
 
 val of_list: 'a list -> 'a array
+(**
+  [of_list [a0; a1; ... an]] creates the array [[|a0; a1; ... an|]].
+*)

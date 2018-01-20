@@ -55,7 +55,7 @@ val collect: 'a Iter.t -> 'a list
 
 val fold: 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
 (**
-  [List.fold a f [b1; ...; bn]] is [f (... (f (f a b1) b2) ...) bn].
+  [fold a f [b0; b1; ... bn]] is [f (... (f (f a b0) b1) ...) bn].
 *)
 
 

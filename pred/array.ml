@@ -56,13 +56,17 @@ let find p arr =
 
 (** {1 mutation} *)
 
-let fill = Caml.fill
+let fill start end_ el arr =
+  Caml.fill arr start (end_ - start) el
 
-let blit = Caml.blit
+let blit start1 end1 arr1 start2 arr2 =
+  Caml.blit arr1 start1 arr2 start2 (end1 - start1)
 
-let sort = Caml.fast_sort
+let sort = Caml.sort
 
 let stable_sort = Caml.stable_sort
+
+let fast_sort = Caml.fast_sort
 
 (** {1 iteration} *)
 
