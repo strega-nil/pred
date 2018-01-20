@@ -30,12 +30,6 @@ let flatten xs =
 
 let concat = flatten
 
-let iter init = 
-  Iter.make init 
-    (function
-    | x :: xs -> Some (xs, x)
-    | [] -> None)
-
 let map f xs =
   let rec helper f new_lst = function
   | x :: xs ->
@@ -45,8 +39,13 @@ let map f xs =
   in
   helper f (ref []) xs
 
-let collect it =
-  Iter.fold [] (fun acc el -> el :: acc) it
+let rec to_seq lst () =
+  match lst with
+  | x :: xs -> Seq.Cons (x, to_seq xs)
+  | [] -> Seq.Nil
+
+let of_seq it =
+  Seq.fold [] (fun acc el -> el :: acc) it
 
 let fold acc f lst = fold_left f acc lst
 

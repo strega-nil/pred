@@ -47,11 +47,11 @@ val map: ('a -> 'b) -> 'a list -> 'b list
  tail recursive, unlike the standard library's implementation.
 *)
 
-val iter: 'a list -> 'a Iter.t
-(** iterates over all the elements of the list *)
+val to_seq: 'a list -> 'a Seq.t
+(** generates a sequence of the elements of the list *)
 
-val collect: 'a Iter.t -> 'a list
-(** collects the elements of the iterator into a list *)
+val of_seq: 'a Seq.t -> 'a list
+(** collects the elements of the sequence into a list *)
 
 val fold: 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
 (**

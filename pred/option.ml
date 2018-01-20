@@ -1,9 +1,7 @@
-let iter x =
-  let func = function
-  | Some x -> Some (None, x)
-  | None -> None
-  in
-  Iter.make x func
+let to_seq self () =
+  match self with
+  | Some x -> Seq.Cons (x, fun () -> Seq.Nil)
+  | None -> Seq.Nil
 
 module Monad = Interfaces.Monad.Make(struct
   type 'a t = 'a option

@@ -88,7 +88,7 @@ val init: int -> (int -> 'a) -> 'a array
 val map: ('a -> 'b) -> 'a array -> 'b array
 (**
   [map f arr] is equivalent to
-  [iter (length arr) (fun i -> f arr.(i))].
+  [init (length arr) (fun i -> f arr.(i))].
 *)
 
 val append: 'a array -> 'a array -> 'a array
@@ -230,9 +230,16 @@ val fast_sort: ('a -> 'a -> int) -> 'a array -> unit
 
 (** {1 iteration} *)
 
-val iter: 'a array -> 'a Iter.t
+val to_seq: 'a array -> 'a Seq.t
 (**
-  [iter [|a0; a1; ... an|]] generates the sequence [<a0; a1; ... an>].
+  [to_seq [|a0; a1; ... an|]] generates the sequence [<a0; a1; ... an>].
+
+  note: there is no [of_seq] for [array].
+  this is due to the inherent nature of sequences being of unknown size.
+  it would require an intermediate allocation.
+  
+  if one wants something similar,
+  they can use [of_list (List.of_seq seq)]
 *)
 
 val fold: 'a -> ('a -> 'b -> 'a) -> 'b array -> 'a

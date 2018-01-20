@@ -70,13 +70,14 @@ let fast_sort = Caml.fast_sort
 
 (** {1 iteration} *)
 
-let iter arr =
-  Iter.make 0
-    (fun idx ->
-      if idx < length arr then
-        Some (idx + 1, get arr idx)
-      else
-        None)
+let to_seq arr =
+  let rec helper n len arr () =
+    if n < len then
+      Seq.Cons (unsafe_get arr n, helper n len arr)
+    else
+      Seq.Nil
+  in
+  helper 0 (length arr) arr
 
 let map f arr =
   init
