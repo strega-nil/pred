@@ -1,3 +1,5 @@
+.PHONY: docs clean build
+
 build:
 	jbuilder build
 
