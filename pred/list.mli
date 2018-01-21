@@ -58,7 +58,7 @@ val is_empty: _ list -> bool
   except that it has [O(1)] time complexity.
 *)
 
-(** {1 constructors *)
+(** {1 constructors} *)
 
 val nil: 'a list
 (**
@@ -79,7 +79,7 @@ val map: ('a -> 'b) -> 'a list -> 'b list
 
   i.e., [map f [a0; a1; ... an]] returns [[f a0; f a1; ... f an]].
 
-  unlike {!Caml.map}, this version is tail recursive,
+  unlike [Caml.map], this version is tail recursive,
   and guaranteed to run in [O(1)] stack space.
 *)
 

@@ -121,7 +121,7 @@ val sub: int -> int -> 'a array -> 'a array
 
   e.g.: [sub [|0; 1|] 0 0] returns the array [[||]]
 
-  note: this is different from {!Caml.sub},
+  note: this is different from [Caml.sub],
   but implements the same functionality.
 
   @raise Invalid_parameter if
