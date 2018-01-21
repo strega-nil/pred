@@ -1,13 +1,18 @@
 (**
-  arrays are a mutable list of objects, with fixed size.
+  arrays are mutable lists of objects, with fixed size.
 
-  they are represented as [[|a0; a1; ... an|]].
+  they are represented syntactically as [[|a0; a1; ... an|]].
 
   size arguments are passed as [int] -
   however, the size of an array is not allowed to be the full range of [int].
   
   [0 <= size < Sys.max_array_length] for most array types,
   but [0 <= size < Sys.max_array_length / 2] for [float array]
+*)
+
+module Caml: module type of Pred_caml_stdlib.Array
+(**
+  an alias for the original [Array] module from the OCaml standard library.
 *)
 
 type 'a t = 'a array

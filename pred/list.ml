@@ -1,34 +1,44 @@
-include Pred_caml_stdlib.List
+module Caml = Pred_caml_stdlib.List
 
 type 'a t = 'a list
 
+(* list operations *)
+
 let hd = function
-| x :: _ -> Some x
 | [] -> None
+| x :: _ -> Some x
 
 let tl = function
-| _ :: xs -> Some xs
 | [] -> None
+| _ :: xs -> Some xs
 
-let nth idx lst = nth_opt lst idx
-
-let rev lst =
-  let rec helper cur = function
-  | x :: xs -> (helper [@tailcall]) (x :: cur) xs
-  | [] -> cur
+let nth n lst =
+  let rec helper n = function
+  | [] -> None
+  | x :: _ when n = 0 -> Some x
+  | _ :: xs -> helper (n - 1) xs
   in
-  helper [] lst
+  if n < 0 then
+    raise (Invalid_argument "negative n")
+  else
+    helper n lst
 
-let flatten xs =
-  let rec helper new_lst = function
-  | x :: xs ->
-    new_lst := append x !new_lst;
-    (helper [@tailcall]) new_lst xs
-  | [] -> !new_lst
+let length lst =
+  let rec helper n = function
+  | [] -> n
+  | _ :: xs -> helper (n + 1) xs
   in
-  helper (ref []) xs
+  helper 0 lst
 
-let concat = flatten
+let is_empty = function
+| [] -> true
+| _ :: _ -> false
+
+(** {1 constructors *)
+
+let nil = []
+
+let cons x xs = x :: xs
 
 let map f xs =
   let rec helper f new_lst = function
@@ -39,6 +49,42 @@ let map f xs =
   in
   helper f (ref []) xs
 
+let rev lst =
+  let rec helper cur = function
+  | x :: xs -> (helper [@tailcall]) (x :: cur) xs
+  | [] -> cur
+  in
+  helper [] lst
+
+let rev_map f lst =
+  let rec helper f acc = function
+  | [] -> acc
+  | x :: xs -> helper f (f x :: acc) xs
+  in
+  helper f [] lst
+
+let append = Caml.append
+
+let flatten = Caml.flatten
+
+let concat = flatten
+
+let flat_map f lst =
+  let rec helper old ret f =
+    match old with
+    | x :: xs ->
+      (*
+        impl note - not tail recursive
+        uses stack space on the order of O(len (f x))
+      *)
+      ret := append (f x) !ret;
+      (helper [@tailcall]) xs ret f
+    | [] -> !ret
+  in
+  helper lst (ref []) f
+
+(* iteration *)
+
 let rec to_seq lst () =
   match lst with
   | x :: xs -> Seq.Cons (x, to_seq xs)
@@ -47,26 +93,11 @@ let rec to_seq lst () =
 let of_seq it =
   Seq.fold [] (fun acc el -> el :: acc) it
 
-let fold acc f lst = fold_left f acc lst
+let fold acc f lst = Caml.fold_left f acc lst
 
 module Monad = Interfaces.Monad.Make(struct
   type nonrec 'a t = 'a t
 
   let wrap x = [x]
-  let (>>=) lst f =
-    (* impl note - uses a ref in order to be tail recursive *)
-    let rec helper old ret f =
-      match old with
-      | x :: xs ->
-        (*
-          impl note - not tail recursive
-          uses stack space on the order of O(len (f x))
-        *)
-        ret := append (f x) !ret;
-        (helper [@tailcall]) xs ret f
-      | [] -> ()
-    in
-    let ret = ref [] in
-    helper lst ret f;
-    !ret
+  let (>>=) xs f = flat_map f xs
 end)

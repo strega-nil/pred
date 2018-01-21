@@ -1,3 +1,20 @@
+(**
+  lists are singly-linked, immutable lists of objects.
+
+  they are represented syntactically as [[a0; a1; ... an]].
+
+  the base constructors for ['a list] are:
+    - [[]], which creates an empty list
+    - [(x: 'a) :: (xs: 'a list)],
+      which returns the list [xs] with [x] appended to the front.
+      [xs] is not mutated at all.
+*)
+
+module Caml: module type of Pred_caml_stdlib.List
+(**
+  an alias for the original [List] module from the OCaml standard library.
+*)
+
 type 'a t = 'a list
 (** type alias *)
 
@@ -5,53 +22,134 @@ type 'a t = 'a list
 
 val hd: 'a list -> 'a option
 (**
-  @return the first element of the given list.
-  @return [None] if the given list is empty.
+  [hd xs] returns the first element of [xs] if it isn't empty;
+  otherwise, it returns [None].
 *)
 
 val tl: 'a list -> 'a list option
 (**
-  @return the given list without its first element.
-  @return [None] if the given list is empty.
+  [tl xs] returns [xs] without the first element,
+  if [xs] isn't empty.
+  otherwise, it returns [None].
+
+  e.g., [tl (x :: xs)] returns [Some xs]
 *)
 
 val nth: int -> 'a list -> 'a option
 (**
-  @return the [n]-th element of the given list.
-  the first element is at position [0].
-  @return [None] if the list is too short.
-  @raise Invalid_argument if [n] is negative.
+  [nth n [a0; a1; ... am]] returns [Some an],
+  if there is an [n]-th element.
+  if [n >= length xs], then returns [None].
+
+  has [O(n)] time complexity.
+
+  @raise Invalid_argument if [n < 0]
+*)
+
+val length: _ list -> int
+(**
+  [length xs] returns the number of elements in [xs].
+  has [O(length xs)] time complexity.
+*)
+
+val is_empty: _ list -> bool
+(**
+  equivalent to [length xs = 0],
+  except that it has [O(1)] time complexity.
+*)
+
+(** {1 constructors *)
+
+val nil: 'a list
+(**
+  returns the empty list, [[]], for any type.
+*)
+
+val cons: 'a -> 'a list -> 'a list
+(**
+  [cons x xs] is equivalent to [x :: xs] -
+  basically, appends [x] to the front of [xs],
+  and returns the new list.
+*)
+
+val map: ('a -> 'b) -> 'a list -> 'b list
+(**
+  [map f as] returns a new list,
+  created by applying [f] to each element in [as].
+
+  i.e., [map f [a0; a1; ... an]] returns [[f a0; f a1; ... f an]].
+
+  unlike {!Caml.map}, this version is tail recursive,
+  and guaranteed to run in [O(1)] stack space.
 *)
 
 val rev: 'a list -> 'a list
 (**
-  @return the reverse of the parameter.
+  [rev xs] returns a new list, created by reversing [xs].
+
+  i.e., [rev [a0; a1; ... an]] returns [[an; a(n - 1); ... a0]]
+*)
+
+val rev_map: ('a -> 'b) -> 'a list -> 'b list
+(**
+  [rev_map f as] returns a new list,
+  created by applying [f] to each element in [as],
+  applied from the back to the front of the list.
+
+  i.e., [rev_map f [a0; a1; ... an]] returns [[f an; f a(n - 1); ... f a0]].
+
+  equivalent to [map f (rev as)], but more efficient.
+*)
+
+val append: 'a list -> 'a list -> 'a list
+(**
+  [append xs ys] returns a new list with each element in [xs] in front of [ys].
+
+  i.e., [append [a0; a1; ... an] [b0; b1; ... bn]]
+  returns [[a0; a1; ... an; b0; b1; ... bn]].
+
+  has [O(length xs)] time complexity,
+  and uses [O(length xs)] stack space.
 *)
 
 val flatten: 'a list list -> 'a list
 (**
-  Concatenates a list of lists.
-  tail recursive in the size of the overarching list;
-  not tail recursive in the size of each element list.
+  [flatten xs] returns a new list,
+  created by expanding out each element of [xs] into the new list.
+
+  i.e., [flatten [[a0; a1; ... an]; [b0; b1; ... bn]; ... xn]]
+  returns [[a0; a1; ... an; b0; b1; ... bn; ... ]].
+
+  uses [O(n)] stack space, where [n] is the longest list in [xs].
 *)
 
 val concat: 'a list list -> 'a list
-(** an alias for [flatten] *)
+(** an alias for {!flatten} *)
 
-(** {2 iterators} *)
-
-val map: ('a -> 'b) -> 'a list -> 'b list
+val flat_map: ('a -> 'b list) -> 'a list -> 'b list
 (**
- [List.map f [a0; ... an]] applies [f] to each of [am]
- @return [[f a0; ... f an]].
- tail recursive, unlike the standard library's implementation.
+  [flat_map f [a0; a1; ... an]],
+  where [f an] generates [[bn0; bn1; ... bnn]],
+  generates [[b00; b11; ... ; b10; b11; ... ; ...]].
+
+  equivalent to {!map} followed by {!flatten},
+  but more efficient.
+
+  uses [O(n)] stack space,
+  where [n] is the longest list returned by [f].
 *)
 
+(** {1 iteration} *)
+
 val to_seq: 'a list -> 'a Seq.t
-(** generates a sequence of the elements of the list *)
+(**
+  [to_seq [a0; a1; ... an]] generates the sequence [<a0; a1; ... an>].
+*)
 
 val of_seq: 'a Seq.t -> 'a list
-(** collects the elements of the sequence into a list *)
+(**
+  [of_seq <a0; a1; ... an>] creates the list [[a0; a1; ... an]].
+*)
 
 val fold: 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
 (**
