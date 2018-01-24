@@ -3,9 +3,13 @@ type t = {
   mutable length: int;
 }
 
-let make () = {buff = Bytes.create(0); length = 0}
+let make () = {buff = Bytes.create(8); length = 0}
 
-let with_capacity cap = {buff = Bytes.create cap; length = 0}
+let with_capacity cap =
+  if cap < 8 then
+    make ()
+  else
+    {buff = Bytes.create cap; length = 0}
 
 let clone {buff; length} = {buff = Bytes.copy buff; length}
 
