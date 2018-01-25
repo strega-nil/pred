@@ -10,10 +10,6 @@
 
 *)
 
-module type Type = sig
-  type t
-  (** the type that should be passed to the interface *)
-end
 (**
   useful for having types that are parametrized in reality,
   but not in the interface.
@@ -21,32 +17,11 @@ end
   one might implement {!Result_monad} with a functor over the error type,
   for example - this is done in {!Result.Monad}.
 *)
-
-
-module Monad: sig
-  module type Implementation = sig
-    type 'a t
-
-    val (>>=): 'a t -> ('a -> 'b t) -> 'b t
-    val wrap: 'a -> 'a t
-  end
-
-  module type Interface = sig
-    type 'a t
-
-    val (>>=): 'a t -> ('a -> 'b t) -> 'b t
-    val wrap: 'a -> 'a t
-
-    module Let_syntax: sig
-      val bind: 'a t -> f: ('a -> 'b t) -> 'b t
-      val map: 'a t -> f: ('a -> 'b) -> 'b t
-      val both: 'a t -> 'b t -> ('a * 'b) t
-    end
-  end
-
-  module Make(M: Implementation):
-    Interface with type 'a t = 'a M.t
+module type Type = sig
+  (** the type that should be passed to the interface *)
+  type t
 end
+
 (**
   the infamous burrito of functional programming lore.
 
@@ -70,29 +45,34 @@ end
     - it should not matter whether bind is associated left, or right
 
 *)
-
-module Result_monad: sig
+module Monad : sig
   module type Implementation = sig
-    type error
+    type 'a t
 
-    include Monad.Implementation
+    val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
 
-    val wrap_err: error -> 'a t
+    val wrap : 'a -> 'a t
   end
 
   module type Interface = sig
-    type error
+    type 'a t
 
-    include Monad.Interface
+    val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
 
-    val wrap_err: error -> 'a t
+    val wrap : 'a -> 'a t
+
+    module Let_syntax : sig
+      val bind : 'a t -> f:('a -> 'b t) -> 'b t
+
+      val map : 'a t -> f:('a -> 'b) -> 'b t
+
+      val both : 'a t -> 'b t -> ('a * 'b) t
+    end
   end
 
-  module Make(M: Implementation):
-    Interface
-      with type error = M.error
-      and type 'a t = 'a M.t
+  module Make (M : Implementation) : Interface with type 'a t = 'a M.t
 end
+
 (**
   [Result_monad] is an extension to regular {!Monad},
   with support for an error type.
@@ -101,4 +81,23 @@ end
   instead of the regular {!Monad},
   because it gives access to [wrap_err].
 *)
+module Result_monad : sig
+  module type Implementation = sig
+    type error
 
+    include Monad.Implementation
+
+    val wrap_err : error -> 'a t
+  end
+
+  module type Interface = sig
+    type error
+
+    include Monad.Interface
+
+    val wrap_err : error -> 'a t
+  end
+
+  module Make (M : Implementation) :
+    Interface with type error = M.error and type 'a t = 'a M.t
+end

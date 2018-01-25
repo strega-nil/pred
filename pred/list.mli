@@ -10,23 +10,23 @@
       [xs] is not mutated at all.
 *)
 
-module Caml: module type of Pred_caml_stdlib.List
 (**
   an alias for the original [List] module from the OCaml standard library.
 *)
+module Caml : module type of Pred_caml_stdlib.List
 
-type 'a t = 'a list
 (** type alias *)
+type 'a t = 'a list
 
 (** {1 list operations }  *)
 
-val hd: 'a list -> 'a option
+val hd : 'a list -> 'a option
 (**
   [hd xs] returns the first element of [xs] if it isn't empty;
   otherwise, it returns [None].
 *)
 
-val tl: 'a list -> 'a list option
+val tl : 'a list -> 'a list option
 (**
   [tl xs] returns [xs] without the first element,
   if [xs] isn't empty.
@@ -35,7 +35,7 @@ val tl: 'a list -> 'a list option
   e.g., [tl (x :: xs)] returns [Some xs]
 *)
 
-val nth: int -> 'a list -> 'a option
+val nth : int -> 'a list -> 'a option
 (**
   [nth n [a0; a1; ... am]] returns [Some an],
   if there is an [n]-th element.
@@ -46,13 +46,13 @@ val nth: int -> 'a list -> 'a option
   @raise Invalid_argument if [n < 0]
 *)
 
-val length: _ list -> int
+val length : _ list -> int
 (**
   [length xs] returns the number of elements in [xs].
   has [O(length xs)] time complexity.
 *)
 
-val is_empty: _ list -> bool
+val is_empty : _ list -> bool
 (**
   equivalent to [length xs = 0],
   except that it has [O(1)] time complexity.
@@ -60,19 +60,19 @@ val is_empty: _ list -> bool
 
 (** {1 constructors} *)
 
-val nil: 'a list
+val nil : 'a list
 (**
   returns the empty list, [[]], for any type.
 *)
 
-val cons: 'a -> 'a list -> 'a list
+val cons : 'a -> 'a list -> 'a list
 (**
   [cons x xs] is equivalent to [x :: xs] -
   basically, appends [x] to the front of [xs],
   and returns the new list.
 *)
 
-val map: ('a -> 'b) -> 'a list -> 'b list
+val map : ('a -> 'b) -> 'a list -> 'b list
 (**
   [map f as] returns a new list,
   created by applying [f] to each element in [as].
@@ -83,14 +83,14 @@ val map: ('a -> 'b) -> 'a list -> 'b list
   and guaranteed to run in [O(1)] stack space.
 *)
 
-val rev: 'a list -> 'a list
+val rev : 'a list -> 'a list
 (**
   [rev xs] returns a new list, created by reversing [xs].
 
   i.e., [rev [a0; a1; ... an]] returns [[an; a(n - 1); ... a0]]
 *)
 
-val rev_map: ('a -> 'b) -> 'a list -> 'b list
+val rev_map : ('a -> 'b) -> 'a list -> 'b list
 (**
   [rev_map f as] returns a new list,
   created by applying [f] to each element in [as],
@@ -101,7 +101,7 @@ val rev_map: ('a -> 'b) -> 'a list -> 'b list
   equivalent to [map f (rev as)], but more efficient.
 *)
 
-val append: 'a list -> 'a list -> 'a list
+val append : 'a list -> 'a list -> 'a list
 (**
   [append xs ys] returns a new list with each element in [xs] in front of [ys].
 
@@ -112,7 +112,7 @@ val append: 'a list -> 'a list -> 'a list
   and uses [O(length xs)] stack space.
 *)
 
-val flatten: 'a list list -> 'a list
+val flatten : 'a list list -> 'a list
 (**
   [flatten xs] returns a new list,
   created by expanding out each element of [xs] into the new list.
@@ -123,10 +123,10 @@ val flatten: 'a list list -> 'a list
   uses [O(n)] stack space, where [n] is the longest list in [xs].
 *)
 
-val concat: 'a list list -> 'a list
+val concat : 'a list list -> 'a list
 (** an alias for {!flatten} *)
 
-val flat_map: ('a -> 'b list) -> 'a list -> 'b list
+val flat_map : ('a -> 'b list) -> 'a list -> 'b list
 (**
   [flat_map f [a0; a1; ... an]],
   where [f an] generates [[bn0; bn1; ... bnn]],
@@ -141,20 +141,19 @@ val flat_map: ('a -> 'b list) -> 'a list -> 'b list
 
 (** {1 iteration} *)
 
-val to_seq: 'a list -> 'a Seq.t
+val to_seq : 'a list -> 'a Seq.t
 (**
   [to_seq [a0; a1; ... an]] generates the sequence [<a0; a1; ... an>].
 *)
 
-val of_seq: 'a Seq.t -> 'a list
+val of_seq : 'a Seq.t -> 'a list
 (**
   [of_seq <a0; a1; ... an>] creates the list [[a0; a1; ... an]].
 *)
 
-val fold: 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
+val fold : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
 (**
   [fold a f [b0; b1; ... bn]] is [f (... (f (f a b0) b1) ...) bn].
 *)
 
-
-module Monad: Interfaces.Monad.Interface with type 'a t = 'a t
+module Monad : Interfaces.Monad.Interface with type 'a t = 'a t

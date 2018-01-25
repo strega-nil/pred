@@ -16,34 +16,33 @@
   [it () = it ()] is not necessarily [true].
 *)
 
-type +'a node =
-| Nil
-| Cons of 'a * 'a t
-and 'a t = unit -> 'a node
+type +'a node = Nil | Cons of 'a * 'a t
+
 (**
   the type of a sequence with elements of type ['a].
 
   e.g., [<0; 1; ...>] is an [int t].
 *)
+and 'a t = unit -> 'a node
 
 (** {1 constructors} *)
 
-val empty: 'a t
+val empty : 'a t
 (**
   generates [<>] for all ['a].
 *)
 
-val once: 'a -> 'a t
+val once : 'a -> 'a t
 (**
   given the value [x], generates [<x>].
 *)
 
-val repeat: 'a -> 'a t
+val repeat : 'a -> 'a t
 (**
   given the value [x], generates [<x; x; ... >].
 *)
 
-val range: int -> int -> int t
+val range : int -> int -> int t
 (**
   [range n m], where [n < m], generates [<n; n + 1; ... m - 1>].
 
@@ -52,19 +51,19 @@ val range: int -> int -> int t
 
 (** {1 transformations} *)
 
-val map: ('a -> 'b) -> 'a t -> 'b t
+val map : ('a -> 'b) -> 'a t -> 'b t
 (**
   [map f <a0; a1; ... >] will call the function [f] on each of [a0, a1, ...],
   and generates [<f a0; f a1; ... >].
 *)
 
-val flatten: 'a t t -> 'a t
+val flatten : 'a t t -> 'a t
 (**
   [flatten <<a0; a1; ... >; <b0; b1; ... >; ... >]
   generates [<a0; a1; ... ; b0; b1; ... ; ...>].
 *)
 
-val flat_map: ('a -> 'b t) -> 'a t -> 'b t
+val flat_map : ('a -> 'b t) -> 'a t -> 'b t
 (**
   [flat_map f <a0; a1; ... >],
   where [f an] generates [<bn0; bn1; ... >],
@@ -74,7 +73,7 @@ val flat_map: ('a -> 'b t) -> 'a t -> 'b t
   but more efficient.
 *)
 
-val zip: 'a t -> 'b t -> ('a * 'b) t
+val zip : 'a t -> 'b t -> ('a * 'b) t
 (**
   [zip <x0; x1; ... > <y0; y1; ... >]
   generates [<(x0, y0); (x1, y1); ... >].
@@ -82,21 +81,21 @@ val zip: 'a t -> 'b t -> ('a * 'b) t
   the generated sequence will finish when either of the zipped sequences finish.
 *)
 
-val enumerate: 'a t -> (int * 'a) t
+val enumerate : 'a t -> (int * 'a) t
 (**
   [enumerate <a0; a1; ... >] generates [<(0, a0); (1, a1); ... >]
 *)
 
 (** {1 size transformations} *)
 
-val take: int -> 'a t -> 'a t
+val take : int -> 'a t -> 'a t
 (**
   [take n <a0; a1; ... >] generates the first [n] elements of the sequence.
 
   @raise Invalid_argument if [n < 0]
 *)
 
-val take_while: ('a -> bool) -> 'a t -> 'a t
+val take_while : ('a -> bool) -> 'a t -> 'a t
 (**
   [take_while p <a0; a1; ... >]
   generates the elements until [p an] returns false.
@@ -107,7 +106,7 @@ val take_while: ('a -> bool) -> 'a t -> 'a t
 
 (** {1 use} *)
 
-val nth: int -> 'a t -> 'a option
+val nth : int -> 'a t -> 'a option
 (**
   returns the [n]-th element of the sequence.
   if the sequence does not have at least [n] elements,
@@ -116,19 +115,19 @@ val nth: int -> 'a t -> 'a option
   @raise Invalid_argument if [n < 0]
 *)
 
-val fold: 'a -> ('a -> 'b -> 'a) -> 'b t -> 'a
+val fold : 'a -> ('a -> 'b -> 'a) -> 'b t -> 'a
 (**
   [fold initial f <b0; b1; ... bn>]
   returns [f ( ... (f (f initial b0) b1) ... ) bn]
 *)
 
-val for_each: ('a -> unit) -> 'a t -> unit
+val for_each : ('a -> unit) -> 'a t -> unit
 (**
   [for_each f <a0; a1; ... an>] calls [f] on each element in the sequence,
   as if by [(f a0; f a1; ... f an; ())]
 *)
 
-val for_each_break: ('a -> 'b option) -> 'a t -> 'b option
+val for_each_break : ('a -> 'b option) -> 'a t -> 'b option
 (**
   [for_each_break f <a0; a1; ... >] calls [f] on each element in the sequence,
   until the function returns [None],
@@ -142,4 +141,4 @@ val for_each_break: ('a -> 'b option) -> 'a t -> 'b option
   ]
 *)
 
-module Monad: Interfaces.Monad.Interface with type 'a t = 'a t
+module Monad : Interfaces.Monad.Interface with type 'a t = 'a t
