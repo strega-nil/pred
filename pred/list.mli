@@ -46,6 +46,17 @@ val nth : int -> 'a list -> 'a option
   @raise Invalid_argument if [n < 0]
 *)
 
+val nth_exn : int -> 'a list -> 'a
+(**
+  [nth_exn n lst] is equivalent to [nth n lst],
+  except that if [nth] would return [None],
+  [nth_exn] raises an exception.
+
+  has [O(n)] time complexity.
+
+  @raise Invalid_argument if [not (0 <= n < length lst)]
+*)
+
 val length : _ list -> int
 (**
   [length xs] returns the number of elements in [xs].

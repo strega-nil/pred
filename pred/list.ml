@@ -14,8 +14,12 @@ let nth n lst =
     | x :: _ when n = 0 -> Some x
     | _ :: xs -> helper (n - 1) xs
   in
-  if n < 0 then raise (Invalid_argument "negative n") else helper n lst
+  if n < 0 then raise (Invalid_argument "List.nth") else helper n lst
 
+let nth_exn n lst =
+  match nth n lst with
+  | Some el -> el
+  | None -> raise (Invalid_argument "List.nth_exn")
 
 let length lst =
   let rec helper n = function [] -> n | _ :: xs -> helper (n + 1) xs in
