@@ -53,6 +53,7 @@ end
 module Monad : sig
   module type Implementation = sig
     type 'a t
+
     type 'a comonad
 
     val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
@@ -62,6 +63,7 @@ module Monad : sig
 
   module type Interface = sig
     type 'a t
+
     type 'a comonad
 
     val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
@@ -77,9 +79,8 @@ module Monad : sig
     end
   end
 
-  module Make (M : Implementation) : Interface
-    with type 'a t = 'a M.t
-    and type 'a comonad = 'a M.comonad
+  module Make (M : Implementation) :
+    Interface with type 'a t = 'a M.t and type 'a comonad = 'a M.comonad
 end
 
 (**
@@ -108,6 +109,8 @@ module Result_monad : sig
   end
 
   module Make (M : Implementation) :
-    Interface with type error = M.error and type 'a t = 'a M.t and type 'a
-    comonad= 'a M.comonad
+    Interface
+    with type error = M.error
+     and type 'a t = 'a M.t
+     and type 'a comonad = 'a M.comonad
 end

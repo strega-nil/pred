@@ -5,6 +5,7 @@ end
 module Monad = struct
   module type Implementation = sig
     type 'a t
+
     type 'a comonad
 
     val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
@@ -14,6 +15,7 @@ module Monad = struct
 
   module type Interface = sig
     type 'a t
+
     type 'a comonad
 
     val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
