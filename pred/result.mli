@@ -12,3 +12,4 @@ module Monad (E : Interfaces.Type) :
   Interfaces.Result_monad.Interface
   with type error = E.t
    and type 'o t = ('o, E.t) t
+   and type 'a comonad = 'a

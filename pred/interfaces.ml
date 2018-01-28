@@ -5,25 +5,27 @@ end
 module Monad = struct
   module type Implementation = sig
     type 'a t
+    type 'a comonad
 
-    val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
+    val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
 
     val wrap : 'a -> 'a t
   end
 
   module type Interface = sig
     type 'a t
+    type 'a comonad
 
-    val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
+    val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
 
     val wrap : 'a -> 'a t
 
     module Let_syntax : sig
-      val bind : 'a t -> f:('a -> 'b t) -> 'b t
+      val bind : 'a t -> f:('a comonad -> 'b t) -> 'b t
 
-      val map : 'a t -> f:('a -> 'b) -> 'b t
+      val map : 'a t -> f:('a comonad -> 'b) -> 'b t
 
-      val both : 'a t -> 'b t -> ('a * 'b) t
+      val both : 'a t -> 'b t -> ('a comonad * 'b comonad) t
     end
   end
 

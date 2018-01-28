@@ -93,6 +93,7 @@ let fold acc f lst = Caml.fold_left f acc lst
 
 module Monad = Interfaces.Monad.Make (struct
   type nonrec 'a t = 'a t
+  type 'a comonad = 'a
 
   let wrap x = [x]
 

@@ -12,6 +12,7 @@ module Monad (E : Interfaces.Type) = Interfaces.Result_monad.Make (struct
   type error = E.t
 
   type nonrec 'o t = ('o, E.t) t
+  type 'a comonad = 'a
 
   let ( >>= ) self f = and_then f self
 

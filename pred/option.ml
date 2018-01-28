@@ -11,6 +11,7 @@ let to_seq self () =
 
 module Monad = Interfaces.Monad.Make (struct
   type 'a t = 'a option
+  type 'a comonad = 'a
 
   let ( >>= ) x f = match x with Some x -> f x | None -> None
 

@@ -44,33 +44,42 @@ end
     - bind and then wrap should be equivalent to doing nothing
     - it should not matter whether bind is associated left, or right
 
+  The monad in this module also allows for associated comonadic data.
+  For example, a compiler might have a [span] type,
+  which should go along with each item.
+  If a type's monad does not have comonadic data,
+  then [type 'a comonad = 'a] suffices.
 *)
 module Monad : sig
   module type Implementation = sig
     type 'a t
+    type 'a comonad
 
-    val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
+    val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
 
     val wrap : 'a -> 'a t
   end
 
   module type Interface = sig
     type 'a t
+    type 'a comonad
 
-    val ( >>= ) : 'a t -> ('a -> 'b t) -> 'b t
+    val ( >>= ) : 'a t -> ('a comonad -> 'b t) -> 'b t
 
     val wrap : 'a -> 'a t
 
     module Let_syntax : sig
-      val bind : 'a t -> f:('a -> 'b t) -> 'b t
+      val bind : 'a t -> f:('a comonad -> 'b t) -> 'b t
 
-      val map : 'a t -> f:('a -> 'b) -> 'b t
+      val map : 'a t -> f:('a comonad -> 'b) -> 'b t
 
-      val both : 'a t -> 'b t -> ('a * 'b) t
+      val both : 'a t -> 'b t -> ('a comonad * 'b comonad) t
     end
   end
 
-  module Make (M : Implementation) : Interface with type 'a t = 'a M.t
+  module Make (M : Implementation) : Interface
+    with type 'a t = 'a M.t
+    and type 'a comonad = 'a M.comonad
 end
 
 (**
@@ -99,5 +108,6 @@ module Result_monad : sig
   end
 
   module Make (M : Implementation) :
-    Interface with type error = M.error and type 'a t = 'a M.t
+    Interface with type error = M.error and type 'a t = 'a M.t and type 'a
+    comonad= 'a M.comonad
 end

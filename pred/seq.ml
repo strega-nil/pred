@@ -110,6 +110,7 @@ let rec for_each_break f seq =
 
 module Monad = Interfaces.Monad.Make (struct
   type nonrec 'a t = 'a t
+  type 'a comonad = 'a
 
   let wrap = once
 

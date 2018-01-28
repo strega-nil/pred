@@ -167,4 +167,6 @@ val fold : 'a -> ('a -> 'b -> 'a) -> 'b list -> 'a
   [fold a f [b0; b1; ... bn]] is [f (... (f (f a b0) b1) ...) bn].
 *)
 
-module Monad : Interfaces.Monad.Interface with type 'a t = 'a t
+module Monad : Interfaces.Monad.Interface
+  with type 'a t = 'a t
+  and type 'a comonad = 'a
