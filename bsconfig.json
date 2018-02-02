@@ -1,0 +1,11 @@
+{
+  "name": "pred",
+  "sources": {
+    "dir": "source",
+    "subdirs": ["caml_stdlib"]
+  },
+  "entries": [{
+    "backend": "bytecode",
+    "main-module": "Pred"
+  }]
+}

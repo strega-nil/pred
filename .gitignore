@@ -2,3 +2,5 @@ _build
 *.install
 .merlin
 *.swp
+lib
+node_modules
