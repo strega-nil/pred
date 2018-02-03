@@ -6,7 +6,7 @@ this is possible with the <code class="code">-open Pred</code> compiler flag.</p
 (executables
  ((names (main))
   (libraries (pred))
-  (flags (:standard -w @a-4 -open Pred))))</code></pre><p>it is recommended that one uses this library with Jane Street's <code class="code">ppx_let</code>;
+  (flags (:standard -w @a -open Pred))))</code></pre><p>it is recommended that one uses this library with Jane Street's <code class="code">ppx_let</code>;
 this allows for nice monadic bind syntax,
 instead of using <code class="code">&gt;&gt;=</code> everywhere.</p><p>to do this, add <code class="code">ppx_let</code> as a dependency,
 and add <code class="code">(preprocess (pps (ppx_let)))</code>

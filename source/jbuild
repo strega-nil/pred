@@ -4,4 +4,4 @@
  ((name pred)
   (public_name pred)
   (libraries (pred_caml_stdlib))
-  (flags (:standard -w @a-4))))
+  (flags (:standard -w @a))))

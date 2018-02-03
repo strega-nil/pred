@@ -46,7 +46,9 @@ and flat_map_append f seq tail () =
 let rec zip seq1 seq2 () =
   match (seq1 (), seq2 ()) with
   | Cons (el1, seq1), Cons (el2, seq2) -> Cons ((el1, el2), zip seq1 seq2)
-  | _ -> Nil
+  | Cons _, Nil
+  | Nil, Cons _
+  | Nil, Nil -> Nil
 
 
 let enumerate seq =

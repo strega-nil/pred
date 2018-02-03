@@ -13,7 +13,7 @@
 (executables
  ((names (main))
   (libraries (pred))
-  (flags (:standard -w @a-4 -open Pred))))
+  (flags (:standard -w @a -open Pred))))
   ]}
 
   it is recommended that one uses this library with Jane Street's [ppx_let];
