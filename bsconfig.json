@@ -3,8 +3,18 @@
   "sources": {
     "dir": "source"
   },
-  "entries": [{
-    "backend": "bytecode",
-    "main-module": "Pred"
-  }]
+  "entries": [
+    {
+      "backend": "native",
+      "main-module": "Pred"
+    },
+    {
+      "backend": "bytecode",
+      "main-module": "Pred"
+    },
+    {
+      "backend": "js",
+      "main-module": "Pred"
+    }
+  ]
 }
