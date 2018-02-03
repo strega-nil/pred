@@ -1,8 +1,7 @@
 {
   "name": "pred",
   "sources": {
-    "dir": "source",
-    "subdirs": ["caml_stdlib"]
+    "dir": "source"
   },
   "entries": [{
     "backend": "bytecode",
