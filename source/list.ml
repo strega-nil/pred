@@ -36,15 +36,7 @@ let nil = []
 
 let cons x xs = x :: xs
 
-let map f xs =
-  let rec helper f new_lst = function
-    | x :: xs ->
-        new_lst := f x :: !new_lst ;
-        (helper [@tailcall]) f new_lst xs
-    | [] -> !new_lst
-  in
-  helper f (ref []) xs
-
+let map = List.map
 
 let rev lst =
   let rec helper cur = function

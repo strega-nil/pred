@@ -89,9 +89,6 @@ val map : ('a -> 'b) -> 'a list -> 'b list
   created by applying [f] to each element in [as].
 
   i.e., [map f [a0; a1; ... an]] returns [[f a0; f a1; ... f an]].
-
-  unlike [Caml.map], this version is tail recursive,
-  and guaranteed to run in [O(1)] stack space.
 *)
 
 val rev : 'a list -> 'a list
