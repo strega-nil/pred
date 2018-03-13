@@ -1,6 +1,9 @@
 Pred
 ---
 
+DEPRECATED
+---
+
 A standard library replacement for ocaml,
 written with the [cafec][cafec] compiler in mind.
 Includes monads, a string buffer, iterators,

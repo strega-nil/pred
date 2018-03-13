@@ -66,7 +66,7 @@ let fast_sort = Caml.fast_sort
 
 let to_seq arr =
   let rec helper n len arr () =
-    if n < len then Seq.Cons (unsafe_get arr n, helper n len arr) else Seq.Nil
+    if n < len then Seq.Cons (unsafe_get arr n, helper (n + 1) len arr) else Seq.Nil
   in
   helper 0 (length arr) arr
 

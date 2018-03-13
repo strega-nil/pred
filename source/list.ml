@@ -36,7 +36,7 @@ let nil = []
 
 let cons x xs = x :: xs
 
-let map = List.map
+let map = Caml.map
 
 let rev lst =
   let rec helper cur = function
